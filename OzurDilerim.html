@@ -2,49 +2,62 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Özür Dilerim</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Özür ve Mucize</title>
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #1e1e2f, #2c2c3c);
+      height: 100%;
+      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1b2a41);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
       overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .box {
+      position: relative;
+      width: 450px;
+      padding: 40px;
+      border: 2px solid white;
+      border-radius: 12px;
       color: white;
+      font-size: 20px;
+      text-align: center;
+      animation: drawBox 2s ease forwards;
+      opacity: 0;
     }
 
-    .container {
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      background: rgba(255, 255, 255, 0.05);
-      padding: 30px 40px;
-      border-radius: 15px;
-      max-width: 600px;
-      width: 90%;
-      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    @keyframes drawBox {
+      0% {
+        opacity: 0;
+        transform: scale(0.8);
+        clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+      }
     }
 
-    .typing {
-      font-size: 1.2rem;
-      line-height: 1.6;
-      white-space: pre-line;
-      overflow: hidden;
-      border-right: 2px solid rgba(255,255,255,0.6);
-      width: 0;
-      animation: typing 12s steps(100, end) forwards, blink 0.8s step-end infinite;
+    .text-animate {
+      opacity: 0;
+      animation: fadeInText 2s ease forwards;
+      animation-delay: 2s;
     }
 
-    @keyframes typing {
-      from { width: 0; }
-      to { width: 100%; }
-    }
-
-    @keyframes blink {
-      50% { border-color: transparent; }
+    @keyframes fadeInText {
+      to { opacity: 1; }
     }
 
     audio {
@@ -53,20 +66,27 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="typing">
-      Her ne yaptığımı tam bilmesem de...  
-      Sana karşı istemeden kırıcı olduysam...  
-      Tüm içtenliğimle...  
-      Özür dilerim.  
-      
-      Senin gibi biriyle tanıştığım için şanslıyım...
-    </div>
-  </div>
 
-  <audio autoplay loop>
-    <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3" type="audio/mpeg">
-    Tarayıcınız ses dosyasını desteklemiyor.
-  </audio>
+<div class="box">
+  <div class="text-animate">
+    <p>Her ne yaptığımı bilmesem de... senden özür dilerim ❤️</p>
+    <p style="margin-top:15px; font-style: italic;">Senin gibi biriyle tanışmak... bir mucizeydi.</p>
+  </div>
+</div>
+
+<audio id="music" autoplay loop>
+  <source src="https://cdn.pixabay.com/audio/2022/10/30/audio_54e1d39b80.mp3" type="audio/mpeg">
+  Tarayıcınız ses öğesini desteklemiyor.
+</audio>
+
+<script>
+  window.addEventListener("click", () => {
+    const music = document.getElementById("music");
+    if (music.paused) {
+      music.play().catch(e => console.log("Müzik çalamadı:", e));
+    }
+  });
+</script>
+
 </body>
 </html>

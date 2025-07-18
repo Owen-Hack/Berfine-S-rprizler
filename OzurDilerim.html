@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Özür Dilerim</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #fceabb, #f8b500);
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding-top: 100px;
+      color: #333;
+      animation: fadeIn 3s ease-in-out;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      animation: fadeInText 2s ease forwards;
+    }
+
+    p {
+      font-size: 20px;
+      color: #555;
+      animation: fadeInText 3s ease 1s forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInText {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Her ne yaptıysam bilmesem de...</h1>
+  <p>Senden içtenlikle özür dilerim.</p>
+  <p>Senin gibi biriyle tanışmak bile güzel bir tesadüftü.</p>
+
+  <audio autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    Tarayıcınız müziği

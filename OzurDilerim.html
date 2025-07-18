@@ -129,16 +129,16 @@
 
   <!-- BAŞLANGIÇ -->
   <div class="start-button">
-    <button id="startBtn">Bana Bas</button>
+    <button id="startBtn">Lütfen Başla</button>
   </div>
 
   <!-- ANA İÇERİK -->
   <div class="container" id="mainContent" style="display:none;">
     <div class="box-outline" id="boxOutline">
       <div class="message" id="message">
-        <h2>Her Ne Yaptığımı Bilmesem de Senden Özür Dilerim 🙏</h2>
+        <h2>Her ne yaptığımı bilmesem de senden özür dilerim 🙏</h2>
         <p>Seninle tanışmak bana yeniden yaşam enerjisi verdi.<br>
-        Senin gibi biriyle arkadaş olmak bile çok değerli.</p>
+        Sessizliğin bile anlamlı. Varlığın yetiyor.</p>
         <p><strong>Beni affettin mi?</strong></p>
       </div>
     </div>
@@ -148,20 +148,21 @@
     </div>
 
     <div id="yesResponse" class="response">
-      <div class="heart">💗</div>
-      <p>İyi ki varsın! Benimle barışıp bana bir şans verdiğin için teşekkür ederim.</p>
-      <p>Lütfen DM’den barıştığını söyle :)</p>
+      <div class="heart">🩵</div>
+      <p>İyi ki varsın! Beni affedip bana bir şans verdiğin için teşekkür ederim.</p>
+      <p>Lütfen DM’den affettiğini yaz, seni sabırsızlıkla bekliyorum :)</p>
     </div>
 
     <div id="noResponse" class="response">
       <p>Bu cevabı duymak çok üzdü ama yine de seni tanımak çok güzeldi...</p>
       <p>Hoşça kal ve hep mutlu ol. 🌙</p>
+      <p>Beni affetmediysen bile, lütfen bunu DM’den söyle olur mu?</p>
     </div>
   </div>
 
   <!-- MÜZİK -->
   <audio id="sadMusic" loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    <source src="https://files.catbox.moe/lik7un.m4a" type="audio/mpeg">
   </audio>
 
   <!-- JAVASCRIPT -->
@@ -203,7 +204,7 @@
 
     animateLines();
 
-    // BAŞLA BUTONUNA BASILINCA
+    // BAŞLA BUTONU
     document.getElementById('startBtn').onclick = function () {
       document.querySelector('.start-button').style.display = 'none';
       document.getElementById('mainContent').style.display = 'block';
@@ -228,7 +229,7 @@
       }, 4000);
     };
 
-    // CEVAP GÖSTER
+    // CEVAPLAR
     function showResponse(isYes) {
       document.getElementById('buttons').style.display = 'none';
       if (isYes) {

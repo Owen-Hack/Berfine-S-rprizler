@@ -2,180 +2,120 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>O Özel Kişi</title>
+  <title>Özür Dilerim</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
+      background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
+      height: 100vh;
       overflow: hidden;
       font-family: 'Segoe UI', sans-serif;
-      height: 100vh;
-      background: linear-gradient(135deg, #1e1e2f, #2c2c3a);
+      color: white;
+    }
+
+    .container {
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 2s ease;
+      height: 100%;
     }
-    #container {
+
+    .popup {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      max-width: 500px;
+      width: 90%;
       text-align: center;
-      color: white;
-      max-width: 90%;
-      z-index: 2;
+      animation: fadeIn 2s ease forwards;
     }
-    .question {
-      font-size: 24px;
-      margin-bottom: 20px;
+
+    .text {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: textIn 1s ease forwards;
     }
-    .btn {
-      padding: 12px 24px;
-      margin: 10px;
-      font-size: 16px;
+
+    .text2 {
+      animation-delay: 2.2s;
+    }
+
+    .text3 {
+      animation-delay: 4s;
+    }
+
+    .buttons {
+      margin-top: 25px;
+      display: flex;
+      justify-content: space-around;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards;
+      animation-delay: 5.5s;
+    }
+
+    button {
+      padding: 10px 20px;
       border: none;
-      cursor: pointer;
       border-radius: 8px;
-      transition: all 0.3s ease;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
     }
-    .btn:hover {
-      transform: scale(1.05);
+
+    .yes {
+      background-color: #4caf50;
+      color: white;
     }
-    #outputBox {
-      max-width: 90%;
-      width: 500px;
-      min-height: 120px;
-      border: 2px solid white;
-      margin: 30px auto;
-      padding: 20px;
-      font-size: 18px;
-      line-height: 1.6;
-      border-radius: 10px;
-      display: none;
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(5px);
-      animation: drawBox 1s forwards;
+
+    .yes:hover {
+      background-color: #45a049;
     }
-    @keyframes drawBox {
-      0% {opacity: 0; transform: scale(0.8);}
-      100% {opacity: 1; transform: scale(1);}
+
+    .no {
+      background-color: #f44336;
+      color: white;
     }
-    canvas {
+
+    .no:hover {
+      background-color: #d32f2f;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes textIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .music {
       position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 0;
+      bottom: 20px;
+      right: 20px;
+      opacity: 0.4;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
-  <canvas id="bgCanvas"></canvas>
 
-  <div id="container">
-    <div class="question">Onu ilk gördüğün andan beri aklından çıkaramıyor musun?</div>
-    <button class="btn" onclick="answer(true)" style="background:#ff99aa;">Evet</button>
-    <button class="btn" onclick="answer(false)" style="background:#9999ff;">Hayır</button>
-    <div id="outputBox"></div>
+<div class="container">
+  <div class="popup">
+    <div class="text text1">Her ne yaptığımı bilmesem de...</div>
+    <div class="text text2">Senden içtenlikle özür diliyorum.</div>
+    <div class="text text3">Sen, sessizliğin bile huzur veren nadir insanlardansın.</div>
+    <div class="buttons">
+      <button class="yes">Evet</button>
+      <button class="no">Hayır</button>
+    </div>
   </div>
+</div>
 
-  <audio id="music" loop>
-    <source id="musicSource" src="" type="audio/mpeg">
-  </audio>
+<!-- Hüzünlü şarkı embed (otomatik çalacak) -->
+<iframe class="music" width="0" height="0" src="https://www.youtube.com/embed/5qap5aO4i9A?autoplay=1&loop=1&playlist=5qap5aO4i9A" frameborder="0" allow="autoplay"></iframe>
 
-  <script>
-    const outputBox = document.getElementById("outputBox");
-    const music = document.getElementById("music");
-    const musicSource = document.getElementById("musicSource");
-    const ctx = document.getElementById("bgCanvas").getContext("2d");
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    ctx.canvas.width = width;
-    ctx.canvas.height = height;
-
-    function animateHearts() {
-      let hearts = [];
-      for (let i = 0; i < 25; i++) {
-        hearts.push({x: Math.random() * width, y: Math.random() * height, s: Math.random() * 6 + 2});
-      }
-
-      function draw() {
-        ctx.clearRect(0, 0, width, height);
-        for (let h of hearts) {
-          ctx.beginPath();
-          ctx.fillStyle = "#ff69b4";
-          ctx.moveTo(h.x, h.y);
-          ctx.arc(h.x - h.s, h.y, h.s, 0, Math.PI * 2);
-          ctx.arc(h.x + h.s, h.y, h.s, 0, Math.PI * 2);
-          ctx.lineTo(h.x, h.y + h.s * 2);
-          ctx.fill();
-          h.y -= 1.2;
-          if (h.y < -10) h.y = height + 10;
-        }
-        requestAnimationFrame(draw);
-      }
-      draw();
-    }
-
-    function animateRain() {
-      let drops = [];
-      for (let i = 0; i < 100; i++) {
-        drops.push({x: Math.random() * width, y: Math.random() * height, l: Math.random() * 20 + 10});
-      }
-
-      function draw() {
-        ctx.clearRect(0, 0, width, height);
-        ctx.strokeStyle = "#aac";
-        ctx.lineWidth = 2;
-        for (let d of drops) {
-          ctx.beginPath();
-          ctx.moveTo(d.x, d.y);
-          ctx.lineTo(d.x, d.y + d.l);
-          ctx.stroke();
-          d.y += 4;
-          if (d.y > height) d.y = -d.l;
-        }
-        requestAnimationFrame(draw);
-      }
-      draw();
-    }
-
-    function answer(choice) {
-      outputBox.style.display = "block";
-      outputBox.innerHTML = "";
-
-      if (choice) {
-        document.body.style.background = "linear-gradient(135deg, #ffb6c1, #ffa07a)";
-        musicSource.src = "https://cdn.pixabay.com/audio/2022/10/20/audio_a1d3cd6b76.mp3"; // romantik
-        animateHearts();
-        animateText("Senin gibi biriyle tanışmak, hayatımda en güzel rastlantıydı...\nİyi ki varsın ❤️");
-      } else {
-        document.body.style.background = "linear-gradient(135deg, #2c2c3a, #1e1e2f)";
-        musicSource.src = "https://cdn.pixabay.com/audio/2023/03/14/audio_1d11f9e39d.mp3"; // hüzünlü
-        animateRain();
-        animateText("Belki de en güzel hikâyeler, hiç yazılmamış olanlardır...\nHoşça kal.");
-      }
-
-      music.load();
-      music.play();
-    }
-
-    function animateText(text) {
-      let i = 0;
-      const speed = 60;
-      const chars = text.split("");
-      const interval = setInterval(() => {
-        if (i < chars.length) {
-          outputBox.innerHTML += chars[i] === "\n" ? "<br>" : chars[i];
-          i++;
-        } else {
-          clearInterval(interval);
-        }
-      }, speed);
-    }
-
-    window.addEventListener("resize", () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      ctx.canvas.width = width;
-      ctx.canvas.height = height;
-    });
-  </script>
 </body>
 </html>

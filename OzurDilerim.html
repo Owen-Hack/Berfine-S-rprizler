@@ -1,121 +1,153 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Beni Affettin mi?</title>
+  <meta charset="UTF-8">
+  <title>Özür Mesajı</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #1f1c2c, #928dab);
+      height: 100vh;
+      background: linear-gradient(to bottom right, #1b1b2f, #3a0842);
+      font-family: 'Poppins', sans-serif;
+      color: white;
       overflow: hidden;
-      font-family: 'Segoe UI', sans-serif;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
     }
 
     .container {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      color: white;
-    }
-
-    .draw-box {
-      width: 400px;
-      height: 250px;
-      margin: 0 auto;
-      border: 2px solid white;
       position: relative;
-      animation: drawBox 2s ease forwards;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 20px;
+      text-align: center;
     }
 
-    @keyframes drawBox {
-      0% {
-        clip-path: polygon(0 0, 0 0, 0 0, 0 0);
-      }
-      100% {
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-      }
-    }
-
-    h1 {
+    .message-box {
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      border-radius: 12px;
+      padding: 30px;
+      margin: 20px 0;
+      width: 80%;
+      max-width: 600px;
+      backdrop-filter: blur(8px);
+      animation: fadeIn 2s ease forwards;
       opacity: 0;
-      animation: fadeIn 2s 2s forwards;
     }
+
+    .message-box:nth-child(1) { animation-delay: 1s; }
+    .message-box:nth-child(2) { animation-delay: 3s; }
+    .message-box:nth-child(3) { animation-delay: 5s; }
 
     @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
+      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(30px); }
     }
 
-    .start-button {
-      background-color: transparent;
+    .buttons {
+      margin-top: 20px;
+      animation: fadeIn 2s ease forwards;
+      opacity: 0;
+      animation-delay: 7s;
+    }
+
+    button {
+      background: transparent;
       color: white;
       border: 2px solid white;
-      padding: 10px 30px;
-      font-size: 20px;
-      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 18px;
+      margin: 10px;
+      border-radius: 30px;
       cursor: pointer;
       transition: 0.3s ease;
     }
 
-    .start-button:hover {
-      background-color: white;
-      color: black;
+    button:hover {
+      background: white;
+      color: #3a0842;
     }
 
-    .choices {
-      display: none;
+    .response {
       margin-top: 30px;
-    }
-
-    .choice-button {
-      background-color: transparent;
-      color: white;
-      border: 2px solid white;
-      padding: 10px 25px;
-      font-size: 18px;
-      margin: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .choice-button:hover {
-      background-color: white;
-      color: black;
+      font-size: 20px;
+      animation: fadeIn 1s ease forwards;
     }
   </style>
 </head>
 <body>
-  <audio id="background-music" loop>
-    <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_99c5082629.mp3" type="audio/mpeg">
-  </audio>
 
-  <div class="container">
-    <div class="draw-box">
-      <h1 id="title">Bana Bas</h1>
-      <button class="start-button" onclick="start()">▶ Başla</button>
+<canvas id="canvas"></canvas>
 
-      <div class="choices" id="choices">
-        <h1>Beni Affettin mi?</h1>
-        <button class="choice-button">Evet</button>
-        <button class="choice-button">Hayır</button>
-      </div>
-    </div>
+<div class="container">
+  <div class="message-box">Her ne yaptığımı bilemesem de...</div>
+  <div class="message-box">Senden içtenlikle özür dilerim...</div>
+  <div class="message-box"><strong>Beni affettin mi?</strong></div>
+  <div class="buttons">
+    <button onclick="affet(true)">✅ Evet</button>
+    <button onclick="affet(false)">❌ Hayır</button>
   </div>
+  <div id="cevap" class="response"></div>
+</div>
 
-  <script>
-    function start() {
-      const audio = document.getElementById('background-music');
-      audio.play();
-      document.querySelector('.start-button').style.display = 'none';
-      setTimeout(() => {
-        document.getElementById('choices').style.display = 'block';
-      }, 2500);
+<audio autoplay loop>
+  <source src="https://cdn.pixabay.com/download/audio/2023/03/22/audio_1bbf12129c.mp3?filename=emotional-background-145630.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  function affet(evettir) {
+    const cevap = document.getElementById("cevap");
+    if (evettir) {
+      cevap.innerHTML = "Sonsuz teşekkür ederim... Seni mutlu etmek için elimden geleni yapacağım. ❤️<br><br>Lütfen bana DM'den yaz.";
+    } else {
+      cevap.innerHTML = "Saygı duyarım... Ama kalbim seninle kalacak. 💔";
     }
-  </script>
+  }
+
+  // Çizgi kutu animasyonu (canvas)
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let step = 0;
+  function drawBoxes() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+    ctx.lineWidth = 1.5;
+
+    const boxes = [
+      { x: 100, y: 100, w: 300, h: 100 },
+      { x: 500, y: 250, w: 400, h: 120 },
+      { x: canvas.width / 2 - 250, y: 450, w: 500, h: 150 }
+    ];
+
+    for (let b of boxes) {
+      ctx.beginPath();
+      if (step >= 1) ctx.moveTo(b.x, b.y);
+      if (step >= 2) ctx.lineTo(b.x + b.w, b.y);
+      if (step >= 3) ctx.lineTo(b.x + b.w, b.y + b.h);
+      if (step >= 4) ctx.lineTo(b.x, b.y + b.h);
+      if (step >= 5) ctx.lineTo(b.x, b.y);
+      ctx.stroke();
+    }
+
+    step++;
+    if (step <= 6) setTimeout(drawBoxes, 300);
+  }
+  drawBoxes();
+</script>
+
 </body>
 </html>

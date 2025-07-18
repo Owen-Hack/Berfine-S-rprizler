@@ -1,177 +1,128 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Özür Mesajı</title>
+  <meta charset="UTF-8">
+  <title>Özür Dilerim</title>
   <style>
-    html, body {
+    * {
       margin: 0;
       padding: 0;
-      overflow: hidden;
-      background: black;
-      font-family: 'Segoe UI', sans-serif;
+      box-sizing: border-box;
     }
-
-    #container {
-      width: 100vw;
-      height: 100vh;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-    }
-
-    #basButton {
-      padding: 15px 30px;
-      font-size: 20px;
-      background-color: #444;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      z-index: 10;
-    }
-
-    #messageBox {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.8);
-      border: 2px solid white;
-      padding: 30px;
-      border-radius: 20px;
-      color: white;
-      font-size: 20px;
-      max-width: 600px;
-      text-align: center;
-      z-index: 10;
-    }
-
-    #rainCanvas {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
+    html, body {
       height: 100%;
-      z-index: 1;
+      background: linear-gradient(135deg, #1e1e2f, #2c2c3a);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+    .container {
+      width: 90%;
+      max-width: 600px;
+      padding: 30px;
+      border: 2px solid #888;
+      border-radius: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      color: white;
+      text-align: center;
+      opacity: 0;
+      transform: scale(0.8);
+      animation: fadeIn 2s forwards;
     }
 
-    .btns {
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .line {
+      opacity: 0;
+      animation: showText 1s forwards;
+    }
+
+    .line:nth-child(1) { animation-delay: 2s; }
+    .line:nth-child(2) { animation-delay: 4s; }
+    .line:nth-child(3) { animation-delay: 6s; }
+
+    @keyframes showText {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .buttons {
       margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      opacity: 0;
+      animation: showButtons 1s 7s forwards;
     }
 
-    .btns button {
-      margin: 0 10px;
-      padding: 10px 20px;
+    @keyframes showButtons {
+      to {
+        opacity: 1;
+      }
+    }
+
+    button {
+      padding: 10px 30px;
       font-size: 18px;
       border: none;
       border-radius: 10px;
       cursor: pointer;
+      transition: all 0.3s ease;
     }
 
-    .btns .yes { background-color: #28a745; color: white; }
-    .btns .no { background-color: #dc3545; color: white; }
-
-    #result {
+    button.yes {
+      background: #4caf50;
       color: white;
-      margin-top: 30px;
-      font-size: 22px;
-      z-index: 10;
+    }
+
+    button.no {
+      background: #f44336;
+      color: white;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+    }
+
+    audio {
+      display: none;
     }
   </style>
 </head>
 <body>
+  <div class="container" id="box">
+    <div class="line">Her ne yaptığımı bilmesem de...</div>
+    <div class="line">...kalbimi kırdıysam affet lütfen.</div>
+    <div class="line">Senin gülüşün geceyi aydınlatıyor.</div>
 
-<div id="container">
-  <button id="basButton">Bana Bas</button>
-
-  <canvas id="rainCanvas"></canvas>
-
-  <div id="messageBox">
-    <p>Her ne yaptığımı bilemesem de<br>Senden özür dilerim birtanem...</p>
-    <div class="btns">
-      <button class="yes">Evet</button>
-      <button class="no">Hayır</button>
+    <div class="buttons">
+      <p style="font-size: 18px; margin-bottom: 10px;">Beni affettin mi?</p>
+      <button class="yes" onclick="reply(true)">Evet</button>
+      <button class="no" onclick="reply(false)">Hayır</button>
     </div>
   </div>
 
-  <div id="result"></div>
-</div>
+  <audio autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+  </audio>
 
-<audio id="music" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_f780b5ae2c.mp3?filename=rain-piano-ambient-110253.mp3" loop></audio>
-
-<script>
-  const basButton = document.getElementById('basButton');
-  const messageBox = document.getElementById('messageBox');
-  const result = document.getElementById('result');
-  const music = document.getElementById('music');
-
-  basButton.onclick = () => {
-    music.play();
-    basButton.style.display = "none";
-    messageBox.style.display = "flex";
-    initRain();
-  };
-
-  document.querySelector(".yes").onclick = () => {
-    result.textContent = "Teşekkür ederim... Bana DM'den yazmayı unutma ❤️";
-  };
-
-  document.querySelector(".no").onclick = () => {
-    result.textContent = "Üzgünüm... Yine de seni hep seveceğim.";
-  };
-
-  // Rain effect
-  const canvas = document.getElementById('rainCanvas');
-  const ctx = canvas.getContext('2d');
-  let W = window.innerWidth;
-  let H = window.innerHeight;
-  canvas.width = W;
-  canvas.height = H;
-
-  let drops = [];
-  for (let i = 0; i < 500; i++) {
-    drops.push({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      l: Math.random() * 1,
-      xs: -4 + Math.random() * 4 + 2,
-      ys: Math.random() * 10 + 10
-    });
-  }
-
-  function drawRain() {
-    ctx.clearRect(0, 0, W, H);
-    ctx.strokeStyle = "rgba(174,194,224,0.5)";
-    ctx.lineWidth = 1;
-    ctx.lineCap = "round";
-    for (let i = 0; i < drops.length; i++) {
-      let d = drops[i];
-      ctx.beginPath();
-      ctx.moveTo(d.x, d.y);
-      ctx.lineTo(d.x + d.l * d.xs, d.y + d.l * d.ys);
-      ctx.stroke();
-    }
-    moveRain();
-  }
-
-  function moveRain() {
-    for (let i = 0; i < drops.length; i++) {
-      let d = drops[i];
-      d.x += d.xs;
-      d.y += d.ys;
-      if (d.x > W || d.y > H) {
-        d.x = Math.random() * W;
-        d.y = -20;
+  <script>
+    function reply(answer) {
+      if (answer) {
+        alert("Teşekkür ederim... Gerçekten çok özür dilerim.");
+      } else {
+        alert("Anlıyorum... Yine de kalpten özür diliyorum.");
       }
     }
-  }
-
-  function initRain() {
-    setInterval(drawRain, 30);
-  }
-</script>
-
+  </script>
 </body>
 </html>

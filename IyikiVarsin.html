@@ -10,10 +10,7 @@
       font-family: "Segoe UI", sans-serif;
       color: white;
       background: linear-gradient(135deg, #ff7eb3, #ff758c);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      min-height: 100vh;
       text-align: center;
       animation: fadeIn 2s ease;
     }
@@ -22,7 +19,8 @@
       padding: 30px;
       border-radius: 15px;
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-      max-width: 600px;
+      max-width: 800px;
+      margin: 0 auto;
     }
     h1 {
       margin-bottom: 20px;
@@ -31,18 +29,11 @@
       font-size: 17px;
       margin-bottom: 25px;
     }
-    button {
-      background-color: white;
-      color: #ff5e7e;
+    iframe {
+      width: 100%;
+      height: 2000px;
       border: none;
-      padding: 12px 25px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    button:hover {
-      background-color: #ffebf0;
+      margin-top: 20px;
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.95); }
@@ -56,9 +47,9 @@
     <p>Seninle tanıştığımdan beri biraz olsun mutluyum. Beni fark etmen bile yetiyor bazen.<br><br>
     Eğer seni az da olsa gülümsetebildiysem, şimdi senden küçük bir ricam var:</p>
     <p>Senin nelerden hoşlandığını öğrenmem için bir teste var mısın? 🌟</p>
-    <button onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSc1xNxTPsWWd0h0LMEobczMbHLOiJl1JIuw1NH3hH6gPbEcgA/viewform'">
-      Teste Başla
-    </button>
+
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSc1xNxTPsWWd0h0LMEobczMbHLOiJl1JIuw1NH3hH6gPbEcgA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Yükleniyor…</iframe>
+
     <p style="margin-top: 25px; font-size: 15px; opacity: 0.8;">
       Testin sonunda her neyi seçtiysen...<br>
       Ben de onu seviyorum çünkü bu güne kadar hep dışlandım ve kendimin sevdiği bir şey olmadı...

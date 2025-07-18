@@ -1,92 +1,116 @@
-<!DOCTYPE html>
-<html lang="tr">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Özür ve Mucize</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Animated PowerHack Intro</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1b2a41);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: black;
       overflow: hidden;
-      font-family: 'Segoe UI', sans-serif;
-    }
+      font-family: 'Orbitron', sans-serif;
+    }canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
 
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  color: white;
+  text-align: center;
+}
 
-    .box {
-      position: relative;
-      width: 450px;
-      padding: 40px;
-      border: 2px solid white;
-      border-radius: 12px;
-      color: white;
-      font-size: 20px;
-      text-align: center;
-      animation: drawBox 2s ease forwards;
-      opacity: 0;
-    }
+.box-outline {
+  width: 500px;
+  height: 200px;
+  margin: 0 auto;
+  border: 2px solid transparent;
+  position: relative;
+  animation: drawBox 3s forwards;
+}
 
-    @keyframes drawBox {
-      0% {
-        opacity: 0;
-        transform: scale(0.8);
-        clip-path: polygon(0 0, 0 0, 0 0, 0 0);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-      }
-    }
+.title-text {
+  opacity: 0;
+  font-size: 32px;
+  font-weight: bold;
+  letter-spacing: 4px;
+  margin-top: 70px;
+  animation: fadeInText 3s 3s forwards;
+}
 
-    .text-animate {
-      opacity: 0;
-      animation: fadeInText 2s ease forwards;
-      animation-delay: 2s;
-    }
+@keyframes drawBox {
+  0% {
+    border-color: transparent;
+    transform: scaleX(0);
+  }
+  50% {
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: scaleX(1);
+  }
+  100% {
+    border: 2px solid white;
+  }
+}
 
-    @keyframes fadeInText {
-      to { opacity: 1; }
-    }
+@keyframes fadeInText {
+  to {
+    opacity: 1;
+  }
+}
 
-    audio {
-      display: none;
-    }
   </style>
 </head>
 <body>
+  <canvas id="bgCanvas"></canvas>
+  <div class="container">
+    <div class="box-outline"></div>
+    <div class="title-text">POWERHACK SYSTEM ONLINE</div>
+  </div>  <audio autoplay>
+    <source src="https://www.myinstants.com/media/sounds/tf2-critical-hit-sound.mp3" type="audio/mpeg">
+  </audio>  <script>
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-<div class="box">
-  <div class="text-animate">
-    <p>Her ne yaptığımı bilmesem de... senden özür dilerim ❤️</p>
-    <p style="margin-top:15px; font-style: italic;">Senin gibi biriyle tanışmak... bir mucizeydi.</p>
-  </div>
-</div>
-
-<audio id="music" autoplay loop>
-  <source src="https://cdn.pixabay.com/audio/2022/10/30/audio_54e1d39b80.mp3" type="audio/mpeg">
-  Tarayıcınız ses öğesini desteklemiyor.
-</audio>
-
-<script>
-  window.addEventListener("click", () => {
-    const music = document.getElementById("music");
-    if (music.paused) {
-      music.play().catch(e => console.log("Müzik çalamadı:", e));
+    let lines = [];
+    for (let i = 0; i < 50; i++) {
+      lines.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        len: Math.random() * 80 + 20,
+        speed: Math.random() * 1 + 0.5
+      });
     }
-  });
-</script>
 
-</body>
+    function animateLines() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+      ctx.lineWidth = 1;
+      lines.forEach(line => {
+        ctx.beginPath();
+        ctx.moveTo(line.x, line.y);
+        ctx.lineTo(line.x, line.y + line.len);
+        ctx.stroke();
+
+        line.y += line.speed;
+        if (line.y > canvas.height) {
+          line.y = 0;
+          line.x = Math.random() * canvas.width;
+        }
+      });
+      requestAnimationFrame(animateLines);
+    }
+
+    animateLines();
+  </script></body>
 </html>

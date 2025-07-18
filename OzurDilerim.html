@@ -29,29 +29,55 @@
       z-index: 10;
       text-align: center;
       color: white;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    .start-button {
+      z-index: 20;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #startBtn {
+      padding: 15px 30px;
+      font-size: 20px;
+      border: none;
+      border-radius: 10px;
+      background-color: white;
+      color: black;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #startBtn:hover {
+      background-color: #ddd;
     }
 
     .box-outline {
-      width: 600px;
-      height: 300px;
+      width: 100%;
+      height: auto;
       border: 2px solid transparent;
       position: relative;
       animation: drawBox 2.5s forwards;
       margin-bottom: 20px;
+      display: none;
+    }
+
+    .message, .buttons, .response {
+      opacity: 0;
     }
 
     .message {
-      opacity: 0;
       font-size: 18px;
       line-height: 1.6;
       padding: 20px;
-      animation: fadeInText 2s 2.5s forwards;
     }
 
     .buttons {
       margin-top: 20px;
-      opacity: 0;
-      animation: fadeInText 1s 3.5s forwards;
     }
 
     button {
@@ -71,10 +97,9 @@
     }
 
     .response {
-      display: none;
       margin-top: 30px;
       font-size: 18px;
-      animation: fadeInText 2s forwards;
+      display: none;
     }
 
     .heart {
@@ -89,7 +114,7 @@
       100% { border: 2px solid white; }
     }
 
-    @keyframes fadeInText {
+    @keyframes fadeIn {
       to { opacity: 1; }
     }
 
@@ -102,16 +127,22 @@
 <body>
   <canvas id="bgCanvas"></canvas>
 
-  <div class="container">
-    <div class="box-outline">
-      <div class="message">
+  <!-- BAŞLANGIÇ -->
+  <div class="start-button">
+    <button id="startBtn">Bana Bas</button>
+  </div>
+
+  <!-- ANA İÇERİK -->
+  <div class="container" id="mainContent" style="display:none;">
+    <div class="box-outline" id="boxOutline">
+      <div class="message" id="message">
         <h2>Her Ne Yaptığımı Bilmesem de Senden Özür Dilerim 🙏</h2>
         <p>Seninle tanışmak bana yeniden yaşam enerjisi verdi.<br>
         Senin gibi biriyle arkadaş olmak bile çok değerli.</p>
         <p><strong>Beni affettin mi?</strong></p>
       </div>
     </div>
-    <div class="buttons">
+    <div class="buttons" id="buttons">
       <button onclick="showResponse(true)">Evet 💖</button>
       <button onclick="showResponse(false)">Hayır 😔</button>
     </div>
@@ -128,29 +159,32 @@
     </div>
   </div>
 
-  <audio autoplay loop>
+  <!-- MÜZİK -->
+  <audio id="sadMusic" loop>
     <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
   </audio>
 
+  <!-- JAVASCRIPT -->
   <script>
     const canvas = document.getElementById('bgCanvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    // YAĞMUR EFEKTİ
     let lines = [];
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 80; i++) {
       lines.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        len: Math.random() * 100 + 20,
-        speed: Math.random() * 1.5 + 0.5
+        len: Math.random() * 80 + 20,
+        speed: Math.random() * 2 + 1
       });
     }
 
     function animateLines() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.strokeStyle = 'rgba(255,255,255,0.1)';
       ctx.lineWidth = 1;
       lines.forEach(line => {
         ctx.beginPath();
@@ -169,12 +203,40 @@
 
     animateLines();
 
+    // BAŞLA BUTONUNA BASILINCA
+    document.getElementById('startBtn').onclick = function () {
+      document.querySelector('.start-button').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'block';
+
+      const music = document.getElementById('sadMusic');
+      music.play();
+
+      // KUTUYU GÖSTER
+      const box = document.getElementById('boxOutline');
+      box.style.display = 'block';
+
+      // MESAJ
+      setTimeout(() => {
+        const msg = document.getElementById('message');
+        msg.style.animation = 'fadeIn 2s forwards';
+      }, 2500);
+
+      // BUTONLAR
+      setTimeout(() => {
+        const btns = document.getElementById('buttons');
+        btns.style.animation = 'fadeIn 1s forwards';
+      }, 4000);
+    };
+
+    // CEVAP GÖSTER
     function showResponse(isYes) {
-      document.querySelector('.buttons').style.display = 'none';
+      document.getElementById('buttons').style.display = 'none';
       if (isYes) {
         document.getElementById('yesResponse').style.display = 'block';
+        document.getElementById('yesResponse').style.animation = 'fadeIn 2s forwards';
       } else {
         document.getElementById('noResponse').style.display = 'block';
+        document.getElementById('noResponse').style.animation = 'fadeIn 2s forwards';
       }
     }
   </script>

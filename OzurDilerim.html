@@ -1,166 +1,181 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>O özel kişi</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Özür Dilerim</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
+      height: 100%;
+      background: black;
       overflow: hidden;
       font-family: 'Segoe UI', sans-serif;
-      height: 100vh;
-      background: linear-gradient(135deg, #1e1e2f, #2c2c3a);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 2s ease;
     }
-    #container {
-      text-align: center;
-      color: white;
-    }
-    .question {
-      font-size: 28px;
-      margin-bottom: 20px;
-    }
-    .btn {
-      padding: 12px 24px;
-      margin: 10px;
-      font-size: 18px;
-      border: none;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-    }
-    .btn:hover {
-      transform: scale(1.05);
-    }
-    #outputBox {
-      width: 500px;
-      height: 180px;
-      border: 2px solid white;
-      margin: 30px auto;
-      padding: 20px;
-      font-size: 20px;
-      position: relative;
-      display: none;
-      background: rgba(0,0,0,0.3);
-      animation: drawBox 1s forwards;
-    }
-    @keyframes drawBox {
-      0% {opacity: 0; transform: scale(0.8);}
-      100% {opacity: 1; transform: scale(1);}
-    }
+
     canvas {
       position: absolute;
       top: 0;
       left: 0;
-      z-index: -1;
+      z-index: 0;
+    }
+
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      text-align: center;
+      color: white;
+    }
+
+    .box-outline {
+      width: 600px;
+      height: 300px;
+      border: 2px solid transparent;
+      position: relative;
+      animation: drawBox 2.5s forwards;
+      margin-bottom: 20px;
+    }
+
+    .message {
+      opacity: 0;
+      font-size: 18px;
+      line-height: 1.6;
+      padding: 20px;
+      animation: fadeInText 2s 2.5s forwards;
+    }
+
+    .buttons {
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeInText 1s 3.5s forwards;
+    }
+
+    button {
+      background-color: white;
+      color: #ff5e7e;
+      border: none;
+      padding: 12px 25px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0 10px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #ffd2e0;
+    }
+
+    .response {
+      display: none;
+      margin-top: 30px;
+      font-size: 18px;
+      animation: fadeInText 2s forwards;
+    }
+
+    .heart {
+      font-size: 50px;
+      animation: pulse 1s infinite;
+      color: #ff5e7e;
+    }
+
+    @keyframes drawBox {
+      0% { border-color: transparent; transform: scaleX(0); }
+      50% { border-top: 2px solid white; border-bottom: 2px solid white; transform: scaleX(1); }
+      100% { border: 2px solid white; }
+    }
+
+    @keyframes fadeInText {
+      to { opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
     }
   </style>
 </head>
 <body>
   <canvas id="bgCanvas"></canvas>
 
-  <div id="container">
-    <div class="question">Onu ilk gördüğün andan beri aklından çıkaramıyor musun?</div>
-    <button class="btn" onclick="answer(true)" style="background:#ff99aa;">Evet</button>
-    <button class="btn" onclick="answer(false)" style="background:#9999ff;">Hayır</button>
-    <div id="outputBox"></div>
+  <div class="container">
+    <div class="box-outline">
+      <div class="message">
+        <h2>Her Ne Yaptığımı Bilmesem de Senden Özür Dilerim 🙏</h2>
+        <p>Seninle tanışmak bana yeniden yaşam enerjisi verdi.<br>
+        Senin gibi biriyle arkadaş olmak bile çok değerli.</p>
+        <p><strong>Beni affettin mi?</strong></p>
+      </div>
+    </div>
+    <div class="buttons">
+      <button onclick="showResponse(true)">Evet 💖</button>
+      <button onclick="showResponse(false)">Hayır 😔</button>
+    </div>
+
+    <div id="yesResponse" class="response">
+      <div class="heart">💗</div>
+      <p>İyi ki varsın! Benimle barışıp bana bir şans verdiğin için teşekkür ederim.</p>
+      <p>Lütfen DM’den barıştığını söyle :)</p>
+    </div>
+
+    <div id="noResponse" class="response">
+      <p>Bu cevabı duymak çok üzdü ama yine de seni tanımak çok güzeldi...</p>
+      <p>Hoşça kal ve hep mutlu ol. 🌙</p>
+    </div>
   </div>
 
-  <audio id="music" loop>
-    <source id="musicSource" src="" type="audio/mpeg">
+  <audio autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    const outputBox = document.getElementById("outputBox");
-    const music = document.getElementById("music");
-    const musicSource = document.getElementById("musicSource");
-    const ctx = document.getElementById("bgCanvas").getContext("2d");
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    ctx.canvas.width = width;
-    ctx.canvas.height = height;
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    function animateHearts() {
-      let hearts = [];
-      for (let i = 0; i < 20; i++) {
-        hearts.push({x: Math.random() * width, y: Math.random() * height, s: Math.random() * 4 + 1});
-      }
-
-      function draw() {
-        ctx.clearRect(0, 0, width, height);
-        for (let h of hearts) {
-          ctx.beginPath();
-          ctx.fillStyle = "#ff69b4";
-          ctx.moveTo(h.x, h.y);
-          ctx.arc(h.x - h.s, h.y, h.s, 0, Math.PI * 2);
-          ctx.arc(h.x + h.s, h.y, h.s, 0, Math.PI * 2);
-          ctx.lineTo(h.x, h.y + h.s * 2);
-          ctx.fill();
-          h.y -= 1;
-          if (h.y < -10) h.y = height + 10;
-        }
-        requestAnimationFrame(draw);
-      }
-      draw();
+    let lines = [];
+    for (let i = 0; i < 60; i++) {
+      lines.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        len: Math.random() * 100 + 20,
+        speed: Math.random() * 1.5 + 0.5
+      });
     }
 
-    function animateRain() {
-      let drops = [];
-      for (let i = 0; i < 100; i++) {
-        drops.push({x: Math.random() * width, y: Math.random() * height, l: Math.random() * 20 + 10});
-      }
+    function animateLines() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.lineWidth = 1;
+      lines.forEach(line => {
+        ctx.beginPath();
+        ctx.moveTo(line.x, line.y);
+        ctx.lineTo(line.x, line.y + line.len);
+        ctx.stroke();
 
-      function draw() {
-        ctx.clearRect(0, 0, width, height);
-        ctx.strokeStyle = "#aac";
-        ctx.lineWidth = 2;
-        for (let d of drops) {
-          ctx.beginPath();
-          ctx.moveTo(d.x, d.y);
-          ctx.lineTo(d.x, d.y + d.l);
-          ctx.stroke();
-          d.y += 4;
-          if (d.y > height) d.y = -d.l;
+        line.y += line.speed;
+        if (line.y > canvas.height) {
+          line.y = 0;
+          line.x = Math.random() * canvas.width;
         }
-        requestAnimationFrame(draw);
-      }
-      draw();
+      });
+      requestAnimationFrame(animateLines);
     }
 
-    function answer(choice) {
-      outputBox.style.display = "block";
-      outputBox.innerHTML = "";
+    animateLines();
 
-      if (choice) {
-        document.body.style.background = "linear-gradient(135deg, #ffb6c1, #ffa07a)";
-        musicSource.src = "https://cdn.pixabay.com/audio/2022/10/20/audio_a1d3cd6b76.mp3"; // romantik
-        animateHearts();
-        animateText("Senin gibi biriyle tanışmak, hayatımda en güzel rastlantıydı...");
+    function showResponse(isYes) {
+      document.querySelector('.buttons').style.display = 'none';
+      if (isYes) {
+        document.getElementById('yesResponse').style.display = 'block';
       } else {
-        document.body.style.background = "linear-gradient(135deg, #4c4c6d, #3b3b58)";
-        musicSource.src = "https://cdn.pixabay.com/audio/2023/03/14/audio_1d11f9e39d.mp3"; // hüzünlü
-        animateRain();
-        animateText("Belki de en güzel hikâyeler, sessiz kalanlardır...");
+        document.getElementById('noResponse').style.display = 'block';
       }
-      music.load();
-      music.play();
-    }
-
-    function animateText(text) {
-      let i = 0;
-      const speed = 60;
-      const interval = setInterval(() => {
-        if (i < text.length) {
-          outputBox.innerHTML += text[i];
-          i++;
-        } else {
-          clearInterval(interval);
-        }
-      }, speed);
     }
   </script>
 </body>

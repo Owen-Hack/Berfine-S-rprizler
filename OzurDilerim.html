@@ -1,8 +1,9 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Animated PowerHack Intro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Özür Dilerim</title>
   <style>
     html, body {
       margin: 0;
@@ -10,91 +11,146 @@
       height: 100%;
       background: black;
       overflow: hidden;
-      font-family: 'Orbitron', sans-serif;
-    }canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
-}
+      font-family: 'Segoe UI', sans-serif;
+    }
 
-.container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-  color: white;
-  text-align: center;
-}
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
 
-.box-outline {
-  width: 500px;
-  height: 200px;
-  margin: 0 auto;
-  border: 2px solid transparent;
-  position: relative;
-  animation: drawBox 3s forwards;
-}
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      text-align: center;
+      color: white;
+    }
 
-.title-text {
-  opacity: 0;
-  font-size: 32px;
-  font-weight: bold;
-  letter-spacing: 4px;
-  margin-top: 70px;
-  animation: fadeInText 3s 3s forwards;
-}
+    .box-outline {
+      width: 600px;
+      height: 300px;
+      border: 2px solid transparent;
+      position: relative;
+      animation: drawBox 2.5s forwards;
+      margin-bottom: 20px;
+    }
 
-@keyframes drawBox {
-  0% {
-    border-color: transparent;
-    transform: scaleX(0);
-  }
-  50% {
-    border-top: 2px solid white;
-    border-bottom: 2px solid white;
-    transform: scaleX(1);
-  }
-  100% {
-    border: 2px solid white;
-  }
-}
+    .message {
+      opacity: 0;
+      font-size: 18px;
+      line-height: 1.6;
+      padding: 20px;
+      animation: fadeInText 2s 2.5s forwards;
+    }
 
-@keyframes fadeInText {
-  to {
-    opacity: 1;
-  }
-}
+    .buttons {
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeInText 1s 3.5s forwards;
+    }
 
+    button {
+      background-color: white;
+      color: #ff5e7e;
+      border: none;
+      padding: 12px 25px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0 10px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #ffd2e0;
+    }
+
+    .response {
+      display: none;
+      margin-top: 30px;
+      font-size: 18px;
+      animation: fadeInText 2s forwards;
+    }
+
+    .heart {
+      font-size: 50px;
+      animation: pulse 1s infinite;
+      color: #ff5e7e;
+    }
+
+    @keyframes drawBox {
+      0% { border-color: transparent; transform: scaleX(0); }
+      50% { border-top: 2px solid white; border-bottom: 2px solid white; transform: scaleX(1); }
+      100% { border: 2px solid white; }
+    }
+
+    @keyframes fadeInText {
+      to { opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
   </style>
 </head>
 <body>
   <canvas id="bgCanvas"></canvas>
+
   <div class="container">
-    <div class="box-outline"></div>
-    <div class="title-text">POWERHACK SYSTEM ONLINE</div>
-  </div>  <audio autoplay>
-    <source src="https://www.myinstants.com/media/sounds/tf2-critical-hit-sound.mp3" type="audio/mpeg">
-  </audio>  <script>
+    <div class="box-outline">
+      <div class="message">
+        <h2>Her Ne Yaptığımı Bilmesem de Senden Özür Dilerim 🙏</h2>
+        <p>Seninle tanışmak bana yeniden yaşam enerjisi verdi.<br>
+        Senin gibi biriyle arkadaş olmak bile çok değerli.</p>
+        <p><strong>Beni affettin mi?</strong></p>
+      </div>
+    </div>
+    <div class="buttons">
+      <button onclick="showResponse(true)">Evet 💖</button>
+      <button onclick="showResponse(false)">Hayır 😔</button>
+    </div>
+
+    <div id="yesResponse" class="response">
+      <div class="heart">💗</div>
+      <p>İyi ki varsın! Benimle barışıp bana bir şans verdiğin için teşekkür ederim.</p>
+      <p>Lütfen DM’den barıştığını söyle :)</p>
+    </div>
+
+    <div id="noResponse" class="response">
+      <p>Bu cevabı duymak çok üzdü ama yine de seni tanımak çok güzeldi...</p>
+      <p>Hoşça kal ve hep mutlu ol. 🌙</p>
+    </div>
+  </div>
+
+  <audio autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
     const canvas = document.getElementById('bgCanvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
     let lines = [];
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 60; i++) {
       lines.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        len: Math.random() * 80 + 20,
-        speed: Math.random() * 1 + 0.5
+        len: Math.random() * 100 + 20,
+        speed: Math.random() * 1.5 + 0.5
       });
     }
 
     function animateLines() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
       ctx.lineWidth = 1;
       lines.forEach(line => {
         ctx.beginPath();
@@ -112,5 +168,15 @@
     }
 
     animateLines();
-  </script></body>
+
+    function showResponse(isYes) {
+      document.querySelector('.buttons').style.display = 'none';
+      if (isYes) {
+        document.getElementById('yesResponse').style.display = 'block';
+      } else {
+        document.getElementById('noResponse').style.display = 'block';
+      }
+    }
+  </script>
+</body>
 </html>

@@ -2,181 +2,160 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Özür Mesajı</title>
+  <title>Affet Lütfen</title>
   <style>
-    * {
+    html, body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background: #0a0a0a;
-      color: white;
-      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(45deg, #1a1a1a, #3a3a3a);
       overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
     }
 
-    canvas {
+    .center {
       position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 10;
+    }
+
+    .btn-start {
+      padding: 20px 40px;
+      background: #fff;
+      color: #000;
+      font-size: 24px;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 0 15px white;
+    }
+
+    .message-box {
+      width: 400px;
+      height: 250px;
+      margin: auto;
+      border: 3px solid white;
+      border-radius: 20px;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 1s ease;
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(5px);
+    }
+
+    .question {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .btn-yes, .btn-no {
+      padding: 10px 25px;
+      margin: 10px;
+      font-size: 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .btn-yes {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .btn-no {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .canvas-bg {
+      position: fixed;
       top: 0; left: 0;
       width: 100vw;
       height: 100vh;
       z-index: 0;
     }
 
-    #container {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 2;
-      text-align: center;
-    }
-
-    #msgBox {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 12px;
-      padding: 30px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
-      max-width: 500px;
-      margin: auto;
-      display: none;
-      animation: fadeIn 2s ease forwards;
-    }
-
-    .line {
-      margin: 15px 0;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 1s forwards;
-    }
-
-    .line:nth-child(1) { animation-delay: 0.5s; }
-    .line:nth-child(2) { animation-delay: 1s; }
-    .line:nth-child(3) { animation-delay: 1.5s; }
-    .line:nth-child(4) { animation-delay: 2s; }
-
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .btn {
-      background: #222;
-      border: 1px solid #555;
-      color: white;
-      padding: 10px 25px;
-      margin: 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .btn:hover {
-      background: #444;
-    }
-
-    #startBtn {
-      font-size: 24px;
-      padding: 15px 40px;
-      border-radius: 12px;
-      background: #950740;
-      border: none;
-      color: white;
-      cursor: pointer;
-      z-index: 3;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    audio {
-      display: none;
+    .compliment {
+      font-size: 18px;
+      margin-top: 10px;
+      opacity: 0.8;
     }
   </style>
 </head>
 <body>
-  <canvas id="bg"></canvas>
 
-  <button id="startBtn">Bana Dokun</button>
+<div class="center" id="startSection">
+  <button class="btn-start" onclick="start()">Bana Dokun</button>
+</div>
 
-  <div id="container">
-    <div id="msgBox">
-      <div class="line">Her ne yaptıysam bilemesem de...</div>
-      <div class="line">Senden içtenlikle özür dilerim.</div>
-      <div class="line">Sen çok özel birisin...</div>
-      <div class="line">Beni affettin mi?</div>
-      <button class="btn" onclick="alert('Teşekkür ederim... ❤️')">Evet</button>
-      <button class="btn" onclick="fadeOut()">Hayır</button>
-    </div>
+<div class="center" id="messageSection" style="display: none;">
+  <div class="message-box" id="box">
+    <div class="question">Sana ne yaptıysam, affeder misin?</div>
+    <div class="compliment">Sen çok güzelsin... Her şeyden çok kıymetlisin.</div>
+    <button class="btn-yes">Evet</button>
+    <button class="btn-no">Hayır</button>
   </div>
+</div>
 
-  <audio id="bgMusic" loop autoplay>
-    <source src="https://cdn.pixabay.com/download/audio/2023/03/31/audio_169ff6d3c8.mp3?filename=sad-piano-144253.mp3" type="audio/mp3">
-  </audio>
+<canvas class="canvas-bg" id="bgCanvas"></canvas>
 
-  <script>
-    const canvas = document.getElementById("bg");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+<audio id="bgMusic" loop>
+  <source src="https://cdn.pixabay.com/audio/2023/05/16/audio_021319e12e.mp3" type="audio/mpeg">
+</audio>
 
-    let lines = [];
-    for (let i = 0; i < 100; i++) {
-      lines.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        len: Math.random() * 100 + 50,
-        speed: Math.random() * 0.5 + 0.2
-      });
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script>
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  // Arka plan animasyonu
+  let circles = [];
+  for (let i = 0; i < 60; i++) {
+    circles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 4 + 1,
+      dx: (Math.random() - 0.5) * 1.5,
+      dy: (Math.random() - 0.5) * 1.5
+    });
+  }
+
+  function animateBG() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let c of circles) {
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,0.3)';
+      ctx.fill();
+      c.x += c.dx;
+      c.y += c.dy;
+      if (c.x < 0 || c.x > canvas.width) c.dx *= -1;
+      if (c.y < 0 || c.y > canvas.height) c.dy *= -1;
     }
+    requestAnimationFrame(animateBG);
+  }
 
-    function animate() {
-      ctx.fillStyle = "rgba(10,10,10,0.3)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = "#950740";
-      ctx.lineWidth = 1;
-      lines.forEach(l => {
-        ctx.beginPath();
-        ctx.moveTo(l.x, l.y);
-        ctx.lineTo(l.x, l.y + l.len);
-        ctx.stroke();
-        l.y += l.speed;
-        if (l.y > canvas.height) {
-          l.y = -l.len;
-          l.x = Math.random() * canvas.width;
-        }
-      });
-      requestAnimationFrame(animate);
-    }
-    animate();
+  animateBG();
 
-    const startBtn = document.getElementById("startBtn");
-    const msgBox = document.getElementById("msgBox");
-    const bgMusic = document.getElementById("bgMusic");
+  function start() {
+    document.getElementById('startSection').style.display = 'none';
+    document.getElementById('messageSection').style.display = 'block';
+    document.getElementById('bgMusic').play();
 
-    startBtn.onclick = () => {
-      startBtn.style.display = "none";
-      msgBox.style.display = "block";
-      bgMusic.play();
-    };
+    // 3D çizim animasyonu gibi kutu animasyonu
+    anime({
+      targets: '#box',
+      opacity: [0, 1],
+      scale: [0.7, 1],
+      easing: 'easeOutExpo',
+      duration: 1200
+    });
+  }
+</script>
 
-    function fadeOut() {
-      msgBox.style.transition = "opacity 2s ease";
-      msgBox.style.opacity = 0;
-      setTimeout(() => msgBox.innerHTML = "<div class='line'>Anlıyorum... Üzgünüm 😔</div>", 2000);
-    }
-  </script>
 </body>
 </html>

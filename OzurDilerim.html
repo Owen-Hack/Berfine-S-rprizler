@@ -7,115 +7,90 @@
     html, body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
-      height: 100vh;
-      overflow: hidden;
+      height: 100%;
       font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      background: linear-gradient(-45deg, #1e1e2f, #3a3a5a, #2b2b45, #4e4e6b);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       color: white;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-    }
-
-    .popup {
-      background: rgba(0, 0, 0, 0.8);
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-      max-width: 500px;
-      width: 90%;
       text-align: center;
-      animation: fadeIn 2s ease forwards;
+      background: rgba(0, 0, 0, 0.65);
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      width: 80%;
+      max-width: 600px;
     }
 
-    .text {
-      opacity: 0;
-      transform: translateY(10px);
-      animation: textIn 1s ease forwards;
+    .message {
+      font-size: 24px;
+      margin-bottom: 20px;
     }
 
-    .text2 {
-      animation-delay: 2.2s;
+    .compliment {
+      font-size: 20px;
+      font-style: italic;
+      color: #ffcccc;
+      margin-bottom: 30px;
     }
 
-    .text3 {
-      animation-delay: 4s;
+    .question {
+      font-size: 22px;
+      margin-bottom: 20px;
     }
 
-    .buttons {
-      margin-top: 25px;
-      display: flex;
-      justify-content: space-around;
-      opacity: 0;
-      animation: fadeIn 1s ease forwards;
-      animation-delay: 5.5s;
-    }
-
-    button {
-      padding: 10px 20px;
-      border: none;
+    .buttons button {
+      background-color: #ffffff10;
+      color: white;
+      border: 1px solid white;
       border-radius: 8px;
-      font-size: 16px;
+      padding: 12px 24px;
+      margin: 0 10px;
       cursor: pointer;
+      font-size: 18px;
       transition: 0.3s;
     }
 
-    .yes {
-      background-color: #4caf50;
-      color: white;
+    .buttons button:hover {
+      background-color: white;
+      color: black;
     }
 
-    .yes:hover {
-      background-color: #45a049;
-    }
-
-    .no {
-      background-color: #f44336;
-      color: white;
-    }
-
-    .no:hover {
-      background-color: #d32f2f;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    @keyframes textIn {
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .music {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      opacity: 0.4;
-      pointer-events: none;
+    audio {
+      display: none;
     }
   </style>
 </head>
 <body>
-
-<div class="container">
-  <div class="popup">
-    <div class="text text1">Her ne yaptığımı bilmesem de...</div>
-    <div class="text text2">Senden içtenlikle özür diliyorum.</div>
-    <div class="text text3">Sen, sessizliğin bile huzur veren nadir insanlardansın.</div>
+  <div class="container">
+    <div class="message">Her ne yaptıysam bilemesem de, senden içtenlikle özür dilerim.</div>
+    <div class="compliment">Gözlerin kadar güzel bir kalbin olduğunu biliyorum. Bu dünyada senin gibi biri zor bulunur.</div>
+    <div class="question">Beni affettin mi?</div>
     <div class="buttons">
-      <button class="yes">Evet</button>
-      <button class="no">Hayır</button>
+      <button onclick="alert('Gerçekten teşekkür ederim. ❤️')">Evet</button>
+      <button onclick="alert('Yine de seni bekliyor olacağım...')">Hayır</button>
     </div>
   </div>
-</div>
 
-<!-- Hüzünlü şarkı embed (otomatik çalacak) -->
-<iframe class="music" width="0" height="0" src="https://www.youtube.com/embed/5qap5aO4i9A?autoplay=1&loop=1&playlist=5qap5aO4i9A" frameborder="0" allow="autoplay"></iframe>
-
+  <audio autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+    Tarayıcınız ses dosyasını desteklemiyor.
+  </audio>
 </body>
 </html>

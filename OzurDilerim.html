@@ -1,153 +1,138 @@
-<!DOCTYPE html>
-<html lang="tr">
+<!DOCTYPE html><html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Özür Mesajı</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <title>Beni Affet</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
-      height: 100vh;
-      background: linear-gradient(to bottom right, #1b1b2f, #3a0842);
-      font-family: 'Poppins', sans-serif;
-      color: white;
+      background-color: black;
       overflow: hidden;
-    }
-
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 0;
-    }
-
-    .container {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .message-box {
-      border: 2px solid rgba(255, 255, 255, 0.5);
-      border-radius: 12px;
-      padding: 30px;
-      margin: 20px 0;
-      width: 80%;
-      max-width: 600px;
-      backdrop-filter: blur(8px);
-      animation: fadeIn 2s ease forwards;
-      opacity: 0;
-    }
-
-    .message-box:nth-child(1) { animation-delay: 1s; }
-    .message-box:nth-child(2) { animation-delay: 3s; }
-    .message-box:nth-child(3) { animation-delay: 5s; }
-
-    @keyframes fadeIn {
-      to { opacity: 1; transform: translateY(0); }
-      from { opacity: 0; transform: translateY(30px); }
-    }
-
-    .buttons {
-      margin-top: 20px;
-      animation: fadeIn 2s ease forwards;
-      opacity: 0;
-      animation-delay: 7s;
-    }
-
-    button {
-      background: transparent;
+      font-family: 'Segoe UI', sans-serif;
       color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .start-button {
+      padding: 20px 40px;
+      font-size: 24px;
+      background: transparent;
       border: 2px solid white;
-      padding: 12px 25px;
-      font-size: 18px;
-      margin: 10px;
-      border-radius: 30px;
+      color: white;
       cursor: pointer;
-      transition: 0.3s ease;
+      border-radius: 10px;
+      animation: pulse 2s infinite;
     }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
 
-    button:hover {
-      background: white;
-      color: #3a0842;
-    }
+.message-box {
+  position: absolute;
+  width: 600px;
+  padding: 30px;
+  border: 3px dashed white;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.message-box p {
+  font-size: 22px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+.btn-group {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+.btn {
+  padding: 10px 25px;
+  background-color: white;
+  color: black;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 5px;
+}
 
-    .response {
-      margin-top: 30px;
-      font-size: 20px;
-      animation: fadeIn 1s ease forwards;
-    }
   </style>
 </head>
 <body>
+  <button class="start-button" onclick="startApology()">Bana Bas</button>
+  <div class="message-box" id="messageBox">
+    <p>Her ne yaptığımı bilemesem de...</p>
+    <p>Senden içtenlikle özür diliyorum ❤️</p>
+    <p>Çünkü sen... Gönlümde hep bir tanesin.</p>
+    <p><strong>Beni affettin mi?</strong></p>
+    <div class="btn-group">
+      <button class="btn" onclick="handleAnswer(true)">Evet</button>
+      <button class="btn" onclick="handleAnswer(false)">Hayır</button>
+    </div>
+  </div>  <audio id="sadMusic" loop>
+    <source src="https://cdn.pixabay.com/audio/2022/03/28/audio_09c7d1ba07.mp3" type="audio/mp3">
+  </audio><canvas id="canvas"></canvas>
 
-<canvas id="canvas"></canvas>
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-<div class="container">
-  <div class="message-box">Her ne yaptığımı bilemesem de...</div>
-  <div class="message-box">Senden içtenlikle özür dilerim...</div>
-  <div class="message-box"><strong>Beni affettin mi?</strong></div>
-  <div class="buttons">
-    <button onclick="affet(true)">✅ Evet</button>
-    <button onclick="affet(false)">❌ Hayır</button>
-  </div>
-  <div id="cevap" class="response"></div>
-</div>
-
-<audio autoplay loop>
-  <source src="https://cdn.pixabay.com/download/audio/2023/03/22/audio_1bbf12129c.mp3?filename=emotional-background-145630.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-  function affet(evettir) {
-    const cevap = document.getElementById("cevap");
-    if (evettir) {
-      cevap.innerHTML = "Sonsuz teşekkür ederim... Seni mutlu etmek için elimden geleni yapacağım. ❤️<br><br>Lütfen bana DM'den yaz.";
-    } else {
-      cevap.innerHTML = "Saygı duyarım... Ama kalbim seninle kalacak. 💔";
-    }
-  }
-
-  // Çizgi kutu animasyonu (canvas)
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  let step = 0;
-  function drawBoxes() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
-    ctx.lineWidth = 1.5;
-
-    const boxes = [
-      { x: 100, y: 100, w: 300, h: 100 },
-      { x: 500, y: 250, w: 400, h: 120 },
-      { x: canvas.width / 2 - 250, y: 450, w: 500, h: 150 }
-    ];
-
-    for (let b of boxes) {
-      ctx.beginPath();
-      if (step >= 1) ctx.moveTo(b.x, b.y);
-      if (step >= 2) ctx.lineTo(b.x + b.w, b.y);
-      if (step >= 3) ctx.lineTo(b.x + b.w, b.y + b.h);
-      if (step >= 4) ctx.lineTo(b.x, b.y + b.h);
-      if (step >= 5) ctx.lineTo(b.x, b.y);
-      ctx.stroke();
+    let raining = [];
+    for (let i = 0; i < 100; i++) {
+      raining.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        length: Math.random() * 20 + 10,
+        speed: Math.random() * 3 + 2
+      });
     }
 
-    step++;
-    if (step <= 6) setTimeout(drawBoxes, 300);
-  }
-  drawBoxes();
-</script>
+    function drawRain() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = "rgba(255,255,255,0.4)";
+      ctx.lineWidth = 1;
+      for (let drop of raining) {
+        ctx.beginPath();
+        ctx.moveTo(drop.x, drop.y);
+        ctx.lineTo(drop.x, drop.y + drop.length);
+        ctx.stroke();
 
-</body>
+        drop.y += drop.speed;
+        if (drop.y > canvas.height) {
+          drop.y = 0;
+          drop.x = Math.random() * canvas.width;
+        }
+      }
+      requestAnimationFrame(drawRain);
+    }
+
+    function startApology() {
+      document.querySelector(".start-button").style.display = "none";
+      document.getElementById("messageBox").style.opacity = 1;
+      document.getElementById("sadMusic").play();
+      drawRain();
+    }
+
+    function handleAnswer(answer) {
+      const box = document.getElementById("messageBox");
+      if (answer) {
+        box.innerHTML = `<p>Teşekkür ederim... ❤️</p><p>DM'den beni affettiğini bildirmen beni çok mutlu eder.</p>`;
+      } else {
+        box.innerHTML = `<p>Üzgünüm... Seni kırmak istemezdim...</p><p>Yine de kalbim seninle.</p>`;
+      }
+    }
+  </script></body>
 </html>

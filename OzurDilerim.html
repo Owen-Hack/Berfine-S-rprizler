@@ -3,45 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <title>Özür Dilerim</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    html, body {
+    body {
       margin: 0;
       padding: 0;
-      height: 100%;
-      background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
-      background-size: 400% 400%;
-      animation: gradient 15s ease infinite;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #1e1e2f, #2c2c3c);
       display: flex;
-      justify-content: center;
       align-items: center;
-      flex-direction: column;
-      text-align: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
       color: white;
     }
 
-    @keyframes gradient {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    .container {
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px 40px;
+      border-radius: 15px;
+      max-width: 600px;
+      width: 90%;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
     }
 
-    h1 {
-      font-size: 2em;
-      margin: 0;
-      opacity: 0;
-      animation: fadeIn 3s ease forwards;
+    .typing {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      white-space: pre-line;
+      overflow: hidden;
+      border-right: 2px solid rgba(255,255,255,0.6);
+      width: 0;
+      animation: typing 12s steps(100, end) forwards, blink 0.8s step-end infinite;
     }
 
-    p {
-      margin-top: 20px;
-      font-size: 1.2em;
-      opacity: 0;
-      animation: fadeIn 3s ease 2s forwards;
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
     }
 
-    @keyframes fadeIn {
-      to { opacity: 1; }
+    @keyframes blink {
+      50% { border-color: transparent; }
     }
 
     audio {
@@ -50,13 +53,20 @@
   </style>
 </head>
 <body>
-
-  <h1>Her ne yaptığımı bilmesem de, senden içtenlikle özür dilerim.</h1>
-  <p>Senin gibi biriyle tanışmak... Gerçekten güzel bir şans.</p>
+  <div class="container">
+    <div class="typing">
+      Her ne yaptığımı tam bilmesem de...  
+      Sana karşı istemeden kırıcı olduysam...  
+      Tüm içtenliğimle...  
+      Özür dilerim.  
+      
+      Senin gibi biriyle tanıştığım için şanslıyım...
+    </div>
+  </div>
 
   <audio autoplay loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+    <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3" type="audio/mpeg">
+    Tarayıcınız ses dosyasını desteklemiyor.
   </audio>
-
 </body>
 </html>

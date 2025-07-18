@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Senin İçin Berfin</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", sans-serif;
+      color: white;
+      background: linear-gradient(135deg, #ff7eb3, #ff758c);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      animation: fadeIn 2s ease;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      max-width: 600px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 17px;
+      margin-bottom: 25px;
+    }
+
+    button {
+      background-color: white;
+      color: #ff5e7e;
+      border: none;
+      padding: 12px 25px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #ffebf0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>İyi ki varsın Berfin 🌸</h1>
+    <p>Seninle tanıştığımdan beri biraz olsun mutluyum. Beni fark etmen bile yetiyor bazen.<br><br>
+    Eğer seni az da olsa gülümsetebildiysem, şimdi senden küçük bir ricam var:</p>
+    <p>Senin nelerden hoşlandığını öğrenmem için bir teste var mısın? 🌟</p>
+    <button onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSdExampleLink'">
+      Teste Başla
+    </button>
+    <p style="margin-top: 25px; font-size: 15px; opacity: 0.8;">
+      Testin sonunda her neyi seçtiysen...<br>
+      Ben de onu seviyorum. Çünkü bu güne kadar hep dışlandım ve kendimin sevdiği bir şey olmadı...
+    </p>
+  </div>
+</body>
+</html>

@@ -2,160 +2,174 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <title>Affet Lütfen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Özür Mesajı</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(45deg, #1a1a1a, #3a3a3a);
-      overflow: hidden;
+      height: 100%;
       font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      background: linear-gradient(-45deg, #2c3e50, #3498db, #2980b9, #2c3e50);
+      background-size: 400% 400%;
+      animation: bgAnim 15s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
       color: white;
     }
 
-    .center {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      z-index: 10;
-    }
-
-    .btn-start {
-      padding: 20px 40px;
-      background: #fff;
-      color: #000;
-      font-size: 24px;
-      border: none;
-      border-radius: 15px;
-      cursor: pointer;
-      box-shadow: 0 0 15px white;
+    @keyframes bgAnim {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
     }
 
     .message-box {
-      width: 400px;
-      height: 250px;
-      margin: auto;
-      border: 3px solid white;
-      border-radius: 20px;
-      padding: 20px;
+      border: 2px solid white;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      width: 80%;
+      max-width: 600px;
+      background-color: rgba(0,0,0,0.4);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+    }
+
+    .message {
+      font-size: 1.5rem;
+      margin: 15px 0;
       opacity: 0;
-      transition: opacity 1s ease;
-      background-color: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(5px);
+      transform: translateY(10px);
+      transition: all 0.5s ease;
     }
 
-    .question {
-      font-size: 28px;
-      margin-bottom: 20px;
+    .message.show {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    .btn-yes, .btn-no {
-      padding: 10px 25px;
-      margin: 10px;
-      font-size: 20px;
+    .btn {
+      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 1.2rem;
+      background: white;
       border: none;
-      border-radius: 10px;
+      color: black;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn:hover {
+      background: #f1c40f;
+      color: #000;
+    }
+
+    .fade-in {
+      animation: fadeIn 2s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    .choice-btns {
+      display: none;
+      gap: 20px;
+      margin-top: 25px;
+    }
+
+    .choice-btns button {
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      border: none;
       cursor: pointer;
     }
 
-    .btn-yes {
-      background-color: #4caf50;
-      color: white;
+    .yes { background: #2ecc71; color: white; }
+    .no { background: #e74c3c; color: white; }
+
+    /* 3D Yazı Efekti */
+    .message::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(to right, white, transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s ease;
     }
 
-    .btn-no {
-      background-color: #f44336;
-      color: white;
+    .message.show::after {
+      transform: scaleX(1);
     }
 
-    .canvas-bg {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-    }
-
-    .compliment {
-      font-size: 18px;
-      margin-top: 10px;
-      opacity: 0.8;
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-<div class="center" id="startSection">
-  <button class="btn-start" onclick="start()">Bana Dokun</button>
-</div>
+  <div class="message-box">
+    <button id="startBtn" class="btn">Bana Dokun</button>
 
-<div class="center" id="messageSection" style="display: none;">
-  <div class="message-box" id="box">
-    <div class="question">Sana ne yaptıysam, affeder misin?</div>
-    <div class="compliment">Sen çok güzelsin... Her şeyden çok kıymetlisin.</div>
-    <button class="btn-yes">Evet</button>
-    <button class="btn-no">Hayır</button>
+    <div id="messages" class="hidden">
+      <div class="message" style="animation-delay: 0.3s;">Her ne yaptıysam bilemsem de...</div>
+      <div class="message" style="animation-delay: 0.6s;">Senden tüm kalbimle özür dilerim...</div>
+      <div class="message" style="animation-delay: 0.9s;">Sen benim için çok kıymetlisin...</div>
+      <div class="message" style="animation-delay: 1.2s;">İltifatlar yetmez anlatmaya seni...</div>
+      <div class="message" style="animation-delay: 1.5s;">❤️ Seni kırdıysam bin kere özür dilerim...</div>
+      <div class="message" style="animation-delay: 1.8s;">😢 Beni affettin mi?</div>
+      <div class="choice-btns" id="choiceBtns">
+        <button class="yes" onclick="reply('Teşekkür ederim ❤️')">Evet</button>
+        <button class="no" onclick="reply('Yine de seni hep seveceğim... 💔')">Hayır</button>
+      </div>
+    </div>
   </div>
-</div>
 
-<canvas class="canvas-bg" id="bgCanvas"></canvas>
+  <audio id="music" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg" />
+  </audio>
 
-<audio id="bgMusic" loop>
-  <source src="https://cdn.pixabay.com/audio/2023/05/16/audio_021319e12e.mp3" type="audio/mpeg">
-</audio>
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const messagesDiv = document.getElementById('messages');
+    const messages = document.querySelectorAll('.message');
+    const music = document.getElementById('music');
+    const choiceBtns = document.getElementById('choiceBtns');
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-<script>
-  const canvas = document.getElementById('bgCanvas');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+    startBtn.onclick = () => {
+      music.play();
+      startBtn.classList.add('hidden');
+      messagesDiv.classList.remove('hidden');
+      let delay = 0;
+      messages.forEach((msg, i) => {
+        setTimeout(() => {
+          msg.classList.add('show');
+          if (i === messages.length - 1) {
+            choiceBtns.style.display = "flex";
+          }
+        }, delay);
+        delay += 1000;
+      });
+    };
 
-  // Arka plan animasyonu
-  let circles = [];
-  for (let i = 0; i < 60; i++) {
-    circles.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: Math.random() * 4 + 1,
-      dx: (Math.random() - 0.5) * 1.5,
-      dy: (Math.random() - 0.5) * 1.5
-    });
-  }
-
-  function animateBG() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let c of circles) {
-      ctx.beginPath();
-      ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255,255,255,0.3)';
-      ctx.fill();
-      c.x += c.dx;
-      c.y += c.dy;
-      if (c.x < 0 || c.x > canvas.width) c.dx *= -1;
-      if (c.y < 0 || c.y > canvas.height) c.dy *= -1;
+    function reply(response) {
+      messagesDiv.innerHTML = `<div class="message show" style="font-size: 2rem;">${response}</div>`;
     }
-    requestAnimationFrame(animateBG);
-  }
-
-  animateBG();
-
-  function start() {
-    document.getElementById('startSection').style.display = 'none';
-    document.getElementById('messageSection').style.display = 'block';
-    document.getElementById('bgMusic').play();
-
-    // 3D çizim animasyonu gibi kutu animasyonu
-    anime({
-      targets: '#box',
-      opacity: [0, 1],
-      scale: [0.7, 1],
-      easing: 'easeOutExpo',
-      duration: 1200
-    });
-  }
-</script>
-
+  </script>
 </body>
 </html>

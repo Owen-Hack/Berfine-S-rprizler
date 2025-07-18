@@ -2,126 +2,165 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Özür Dilerim</title>
+  <title>O özel kişi</title>
   <style>
-    * {
+    html, body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-    html, body {
-      height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
       background: linear-gradient(135deg, #1e1e2f, #2c2c3a);
       display: flex;
-      justify-content: center;
       align-items: center;
-      font-family: 'Segoe UI', sans-serif;
-      overflow: hidden;
-    }
-    .container {
-      width: 90%;
-      max-width: 600px;
-      padding: 30px;
-      border: 2px solid #888;
-      border-radius: 20px;
-      background: rgba(0, 0, 0, 0.6);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-      color: white;
-      text-align: center;
-      opacity: 0;
-      transform: scale(0.8);
-      animation: fadeIn 2s forwards;
-    }
-
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    .line {
-      opacity: 0;
-      animation: showText 1s forwards;
-    }
-
-    .line:nth-child(1) { animation-delay: 2s; }
-    .line:nth-child(2) { animation-delay: 4s; }
-    .line:nth-child(3) { animation-delay: 6s; }
-
-    @keyframes showText {
-      to {
-        opacity: 1;
-      }
-    }
-
-    .buttons {
-      margin-top: 20px;
-      display: flex;
       justify-content: center;
-      gap: 20px;
-      opacity: 0;
-      animation: showButtons 1s 7s forwards;
+      transition: background 2s ease;
     }
-
-    @keyframes showButtons {
-      to {
-        opacity: 1;
-      }
+    #container {
+      text-align: center;
+      color: white;
     }
-
-    button {
-      padding: 10px 30px;
+    .question {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+    .btn {
+      padding: 12px 24px;
+      margin: 10px;
       font-size: 18px;
       border: none;
-      border-radius: 10px;
       cursor: pointer;
+      border-radius: 8px;
       transition: all 0.3s ease;
     }
-
-    button.yes {
-      background: #4caf50;
-      color: white;
+    .btn:hover {
+      transform: scale(1.05);
     }
-
-    button.no {
-      background: #f44336;
-      color: white;
-    }
-
-    button:hover {
-      transform: scale(1.1);
-    }
-
-    audio {
+    #outputBox {
+      width: 500px;
+      height: 180px;
+      border: 2px solid white;
+      margin: 30px auto;
+      padding: 20px;
+      font-size: 20px;
+      position: relative;
       display: none;
+      background: rgba(0,0,0,0.3);
+      animation: drawBox 1s forwards;
+    }
+    @keyframes drawBox {
+      0% {opacity: 0; transform: scale(0.8);}
+      100% {opacity: 1; transform: scale(1);}
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
     }
   </style>
 </head>
 <body>
-  <div class="container" id="box">
-    <div class="line">Her ne yaptığımı bilmesem de...</div>
-    <div class="line">...kalbimi kırdıysam affet lütfen.</div>
-    <div class="line">Senin gülüşün geceyi aydınlatıyor.</div>
+  <canvas id="bgCanvas"></canvas>
 
-    <div class="buttons">
-      <p style="font-size: 18px; margin-bottom: 10px;">Beni affettin mi?</p>
-      <button class="yes" onclick="reply(true)">Evet</button>
-      <button class="no" onclick="reply(false)">Hayır</button>
-    </div>
+  <div id="container">
+    <div class="question">Onu ilk gördüğün andan beri aklından çıkaramıyor musun?</div>
+    <button class="btn" onclick="answer(true)" style="background:#ff99aa;">Evet</button>
+    <button class="btn" onclick="answer(false)" style="background:#9999ff;">Hayır</button>
+    <div id="outputBox"></div>
   </div>
 
-  <audio autoplay loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+  <audio id="music" loop>
+    <source id="musicSource" src="" type="audio/mpeg">
   </audio>
 
   <script>
-    function reply(answer) {
-      if (answer) {
-        alert("Teşekkür ederim... Gerçekten çok özür dilerim.");
-      } else {
-        alert("Anlıyorum... Yine de kalpten özür diliyorum.");
+    const outputBox = document.getElementById("outputBox");
+    const music = document.getElementById("music");
+    const musicSource = document.getElementById("musicSource");
+    const ctx = document.getElementById("bgCanvas").getContext("2d");
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    ctx.canvas.width = width;
+    ctx.canvas.height = height;
+
+    function animateHearts() {
+      let hearts = [];
+      for (let i = 0; i < 20; i++) {
+        hearts.push({x: Math.random() * width, y: Math.random() * height, s: Math.random() * 4 + 1});
       }
+
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+        for (let h of hearts) {
+          ctx.beginPath();
+          ctx.fillStyle = "#ff69b4";
+          ctx.moveTo(h.x, h.y);
+          ctx.arc(h.x - h.s, h.y, h.s, 0, Math.PI * 2);
+          ctx.arc(h.x + h.s, h.y, h.s, 0, Math.PI * 2);
+          ctx.lineTo(h.x, h.y + h.s * 2);
+          ctx.fill();
+          h.y -= 1;
+          if (h.y < -10) h.y = height + 10;
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    function animateRain() {
+      let drops = [];
+      for (let i = 0; i < 100; i++) {
+        drops.push({x: Math.random() * width, y: Math.random() * height, l: Math.random() * 20 + 10});
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+        ctx.strokeStyle = "#aac";
+        ctx.lineWidth = 2;
+        for (let d of drops) {
+          ctx.beginPath();
+          ctx.moveTo(d.x, d.y);
+          ctx.lineTo(d.x, d.y + d.l);
+          ctx.stroke();
+          d.y += 4;
+          if (d.y > height) d.y = -d.l;
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    function answer(choice) {
+      outputBox.style.display = "block";
+      outputBox.innerHTML = "";
+
+      if (choice) {
+        document.body.style.background = "linear-gradient(135deg, #ffb6c1, #ffa07a)";
+        musicSource.src = "https://cdn.pixabay.com/audio/2022/10/20/audio_a1d3cd6b76.mp3"; // romantik
+        animateHearts();
+        animateText("Senin gibi biriyle tanışmak, hayatımda en güzel rastlantıydı...");
+      } else {
+        document.body.style.background = "linear-gradient(135deg, #4c4c6d, #3b3b58)";
+        musicSource.src = "https://cdn.pixabay.com/audio/2023/03/14/audio_1d11f9e39d.mp3"; // hüzünlü
+        animateRain();
+        animateText("Belki de en güzel hikâyeler, sessiz kalanlardır...");
+      }
+      music.load();
+      music.play();
+    }
+
+    function animateText(text) {
+      let i = 0;
+      const speed = 60;
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          outputBox.innerHTML += text[i];
+          i++;
+        } else {
+          clearInterval(interval);
+        }
+      }, speed);
     }
   </script>
 </body>
